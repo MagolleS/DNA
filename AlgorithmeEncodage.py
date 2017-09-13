@@ -1,6 +1,4 @@
-#!/usr/bin/python3.5
 # coding: utf-8
-
 from string import digits, ascii_uppercase
 from random import randint
 import time
@@ -9,16 +7,12 @@ list_ID = ["00", "01","02","10","11","12","20","21","22"] #Liste conteant les 9 
 listInsert = ["A", "T"]#Liste qui accueille les 2 nucléotides possibles a ajouter au début d'un segment
 listAppend = ["C", "G"]#Liste qui accueille les 2 nucléotides possibles a ajouter à la fin d'un segment
 
-def print_erreur(message):
-    print("/!\ ERREUR /!\ : \n"+message)
-
 def encoder(tipe, valeur, fichier_save):
     """Fonction appelé lorsqu'on lance l'encodage. Elle prend en paramètre le
     type (fichier ou texte), la valeur(texte ou chemin de fichier), ainsi que
     le chemin ou sauver le fichier .dna. Elle renvoi une série de variable
     nécessaire au mode démonstration"""
 
-    print("Lancement de l'encodage")
     
     time1 = time.clock() #Calcule le temps au début de la fonction
     
@@ -244,10 +238,12 @@ def DnaToDnaFinal(s_dna):
 
         
         #Test si le segment a la bonne longueur
+        if len(segment)!=117:
+            print("Pas la bonne longueur")
         if len(segment)<117:
-            print_erreur("Le segment {} a une taille plus petite que 117 ({}).".format(i-1, len(segment)))
+            print("Plus petit ")
         elif len(segment)>117:
-            print_erreur("Le segment {} a une taille plus grande que 117 ({}).".format(i-1, len(segment)))
+            print("plus grand")
     return s_dna_final, dicoDebut, dicoReverse, dicoI3, ID, dicoP, dicoIX, dicoIX_dna, dicoFinal #On renvoi la séquence d'ADN final ainsi que des variables nécessaires au mode décodage.
         
            

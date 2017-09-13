@@ -1,4 +1,21 @@
 import time
+from random import randint
+
+
+def convert(nombre, base = 2):
+    """Fonction permettant de convertir un nombre en base 10 en une base défini.
+    Elle prend en paramètre le nombre en base 10 ainsi que la base vers laquel
+    le nombre doit etre converti, et qui par défaut est 2."""
+    
+    resultat = ''
+    q = nombre // base
+    r = nombre % base
+    resultat = str(r) + resultat
+    while q != 0:
+        r = q % base
+        resultat = str(r) + resultat
+        q = q // base
+    return resultat
 
 def decoder(valeur, fichier_save):
     """Fonction appelé lorsqu'on lance le décodage. Elle prend en paramètre le
@@ -852,6 +869,7 @@ def checkHomopolymere(segment1, segment2):
     elif test2!=0: #Le segment2 possèdent des homopolymères
         return segment1 
 
+
     
 def DNAToTrit(s_dna, pre_nt="A"):
     """Fonction qui transforme une séquence ADN en séquence trinaire.
@@ -863,6 +881,7 @@ def DNAToTrit(s_dna, pre_nt="A"):
     c = "C"
     g = "G"
     t = "T"
+    longueur = len(s_dna)
 
     for index, nt in enumerate(s_dna):
 
@@ -875,6 +894,9 @@ def DNAToTrit(s_dna, pre_nt="A"):
                 s_trit.append("1")
             elif nt == t:
                 s_trit.append("2")
+            else:
+                s_trit.append(randint(0, 2))
+  
         elif pre_nt == c:
             if nt == g:
                 s_trit.append("0")
@@ -882,6 +904,9 @@ def DNAToTrit(s_dna, pre_nt="A"):
                 s_trit.append("1")
             elif nt == a:
                 s_trit.append("2")
+            else:
+                s_trit.append(randint(0, 2))
+
         elif pre_nt == g:
             if nt == t:
                 s_trit.append("0")
@@ -889,6 +914,9 @@ def DNAToTrit(s_dna, pre_nt="A"):
                 s_trit.append("1")
             elif nt == c:
                 s_trit.append("2")
+            else:
+                s_trit.append(randint(0, 2))
+
         elif pre_nt == t:
             if nt == a:
                 s_trit.append("0")
@@ -896,7 +924,15 @@ def DNAToTrit(s_dna, pre_nt="A"):
                 s_trit.append("1")
             elif nt == g:
                 s_trit.append("2")
-
+            else:
+                print("pas nucléotides pr t : ", pre_nt)
+                s_trit.append(randint(0, 2))
+        	
+        else:
+            s_trit.append(randint(0, 2))
+            
+    if len(s_trit) != longueur:
+    	print("Pas la même longueur : s_dna {} s_trit {}".format(longueur, len(s_trit)))
     return s_trit
 
 def reverseDna(s_dna):
@@ -949,8 +985,9 @@ def decode(s_dna, fichier, fichier_save):
         i+=117
 
 
-    for segment in segments.values(): #On va traiter chaque segment séparément
+    for key, segment in segments.items(): #On va traiter chaque segment séparément
         
+
         segment = list(segment)
         
         del segment[116] #On supprime le premier nucléotides du segment
@@ -960,14 +997,22 @@ def decode(s_dna, fichier, fichier_save):
         del segment[100:115]
 
         #On transforme IX en trit.
-        pre_nt = segment[99] 
+        pre_nt = segment[99]
+        if len(IX) != 15:
+        	print("erreur taille IX")
         IX = DNAToTrit(IX, pre_nt=pre_nt)
-        
+
         ID = IX[0:2] #On recupere ID.
         i3 = IX[2:14]#On recupere i3.
         
         p  = int(IX[-1]) #On recupere P, puis on le calcule à partir de ID et i3. On vérifie qu'ils sont bien égales.
-        P = int(ID[0]) + int(i3[0]) + int(i3[2]) + int(i3[4]) + int(i3[6]) + int(i3[8]) + int(i3[10])
+
+        try:
+        	P = int(ID[0]) + int(i3[0]) + int(i3[2]) + int(i3[4]) + int(i3[6]) + int(i3[8]) + int(i3[10])
+        except IndexError:
+            print(len(IX), len(i3), len(ID))
+            print('ID : {}\ni3 : {}'.format(ID, i3))
+
         while P != 0 or P != 1 or P != 2:
             if P <0:
                 P+=3
@@ -976,19 +1021,21 @@ def decode(s_dna, fichier, fichier_save):
             else:
                 break
         if P!=p:
-            print("Erreur P")
+        	print("Erreur P : ", key )
 
-            
         i = int("".join(str(v) for v in i3), 3) #On calcule i à partir de i3 et on vérifie qu'il est égale à la clé du segment ( pas obligatoire, juste pour mon programme).
-
+        if i != key:
+        	print("i et index différents")
+        	print(i, "  ", key)
+        i = key
+        
         #On regarde si i est impair, et si oui, on l'inverse et complemente
         if i%2!=0:
             segment=reverseDna(segment)
-            
-        dicoFinal[i] = "".join(segment) #On ajoute le segment a un dctionnaire avec comme clé i. 
+        if len(segment) == 100:
+        	dicoFinal[i] = "".join(segment) #On ajoute le segment a un dctionnaire avec comme clé i.
 
         
-
     for i, segment in dicoFinal.items(): #On crée un dictionnaire qui va contenir, avec comme clé leur 'position' les 4 segments censés etre pareils pour les comparer.
         if i == 0: #Si c'est le premier segments, on défini les 4 premieres clé.
             dicoSegment[i] = [segment[:25]]
@@ -999,7 +1046,7 @@ def decode(s_dna, fichier, fichier_save):
             dicoSegment[i].append(segment[:25])
             dicoSegment[i+1].append(segment[25:50])
             dicoSegment[i+2].append(segment[50:75])
-            dicoSegment[i+3]= [segment[75:]]
+            dicoSegment[i+3] = [segment[75:]]
             
     for segment in dicoSegment.values():
         """Pour chaque segments, on va comparer tout les segments et procéder a un vote. Si on tombe sur des égalités,
@@ -1055,15 +1102,15 @@ def decode(s_dna, fichier, fichier_save):
                     segmentFinal.append(segment[1])
             elif segment[2] == segment[3]:
                 segmentFinal.append(segment[2])
-
     s_dna_f = "".join(segmentFinal)
     
+
     if len(s_dna_f)%25!=0: #On vérifie que la séquence d'ADN final est bien un multiple de 25.
         print("Erreur !")
+        
 
     s_dna_f = DNAToTrit(s_dna_f) #On transforme la liste d'ADN en une liste ternaire.
-
-    s2 = s_dna_f[len(s_dna_f)-20:len(s_dna_f)] #On recupere les 20 dernier trits de la séquence , donc S2. 
+    s2 = s_dna_f[len(s_dna_f)-20:len(s_dna_f)] #On recupere les 20 dernier trits de la séquence , donc S2.
     i=0
     time1_s4_s1=time.clock()
     for nb in s2: #On "enleve" le nombre de 0 permettant une longueur de 20
@@ -1072,11 +1119,8 @@ def decode(s_dna, fichier, fichier_save):
         else:
             break
     longueur = int("".join(s2[i:len(s2)]),3) #On converti la olongueur en décimal.
-    
-    s1= s_dna_f[:longueur] #On recupere S1 grâce à la longueur calculé avant.
+    s1 = s_dna_f[:longueur]#On recupere S1 grâce à la longueur calculé avant.
     del s_dna_f
-    
-
     s_bytes = tritToByte(s1) #On transforme la séquence ternaire en une séquence d'octets. 
 
     #Si le type est un fichier, on recupere la position de l'extension et on rajoute _dna_decoded entre le nom et l'extension du fichier
@@ -1103,4 +1147,6 @@ def decode(s_dna, fichier, fichier_save):
     
     with open(fichier, "wb") as ouverture: #On crée un fichier avec le chemin crée auparavant et on y écrit la séquence binaire.
         ouverture.write(s_bytes)
+if __name__ == '__main__':
+	decoder("image.jpg.dna", "")
 

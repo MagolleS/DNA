@@ -1,7 +1,6 @@
 from tkinter import *
 from AlgorithmeEncodage import *
 from AlgorithmeDecodage import *
-from AlgorithmeDecodageSansCorrection import *
 
 #import en supplement du module filedialog de tkinter:
 from tkinter.filedialog import askopenfilename,askdirectory
@@ -96,8 +95,6 @@ def decodage():
     mode_encodage.pack()
     mode_decodage.select()
     mode_decodage.pack()
-    correc_erreur.pack()
-
 
     mode_demo.pack()
     button_save.pack()
@@ -213,7 +210,6 @@ def toutForget():
     label_mode.pack_forget()
     mode_encodage.pack_forget()
     mode_decodage.pack_forget()
-    correc_erreur.pack_forget()
     mode_demo.pack_forget()
     button_save.pack_forget()
     label_save.pack_forget()
@@ -280,10 +276,7 @@ def lancer():
             encoder(var_choix.get(), valeur, var_save.get())
         else:
             valeur=entre_file.get()
-            if var_correc.get() == 0:
-                decoder(valeur, var_save.get())
-            else:
-                decoderSansCorrection(valeur, var_save.get())
+            decoder(valeur, var_save.get())
     else:
         valeur=entre_texte_demo.get()
         temps, s_bytes, s_trit1, len_Trit, nb0, s_trit3, s_trit4, s_dna, dicoDebut, dicoReverse, dicoI3, ID, dicoP, dicoIX, dicoIX_dna, dicoFinal, s_dna_final =encoder("texte", valeur, var_save.get())
@@ -312,7 +305,6 @@ var_texte = StringVar()
 var_fichier_texte=StringVar()
 var_texte_texte=StringVar()
 var_demo = IntVar()
-var_correc = IntVar()
 var_texte_demo= StringVar()
 entre_file= StringVar()
 var_save = StringVar()
@@ -352,8 +344,6 @@ choix_texte = Radiobutton(fenetre, text="Texte", variable=var_choix, value="text
 label_mode = Label(fenetre, text="Mode :")
 mode_decodage = Radiobutton(fenetre, text="Décodage", variable=var_mode, value="decode", command=decodage)
 mode_encodage = Radiobutton(fenetre, text="Encodage", variable=var_mode, value="encode", command=encodage)
-correc_erreur = Checkbutton(fenetre, text="Enlever la correction d'erreur", variable = var_correc)
-
 
 mode_demo = Checkbutton(fenetre, text="Mode démonstration", variable = var_demo, command=modeDemonstration)
 label_explication_demo = Label(fenetre, text=explication)
