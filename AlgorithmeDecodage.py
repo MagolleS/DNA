@@ -882,6 +882,7 @@ def DNAToTrit(s_dna, pre_nt="A"):
     g = "G"
     t = "T"
     longueur = len(s_dna)
+    trits = ["0", "1", "2"]
 
     for index, nt in enumerate(s_dna):
 
@@ -895,7 +896,7 @@ def DNAToTrit(s_dna, pre_nt="A"):
             elif nt == t:
                 s_trit.append("2")
             else:
-                s_trit.append(randint(0, 2))
+                s_trit.append(trits[randint(0, 2)])
   
         elif pre_nt == c:
             if nt == g:
@@ -905,7 +906,7 @@ def DNAToTrit(s_dna, pre_nt="A"):
             elif nt == a:
                 s_trit.append("2")
             else:
-                s_trit.append(randint(0, 2))
+                s_trit.append(trits[randint(0, 2)])
 
         elif pre_nt == g:
             if nt == t:
@@ -915,7 +916,7 @@ def DNAToTrit(s_dna, pre_nt="A"):
             elif nt == c:
                 s_trit.append("2")
             else:
-                s_trit.append(randint(0, 2))
+                s_trit.append(trits[randint(0, 2)])
 
         elif pre_nt == t:
             if nt == a:
@@ -926,10 +927,10 @@ def DNAToTrit(s_dna, pre_nt="A"):
                 s_trit.append("2")
             else:
                 print("pas nucléotides pr t : ", pre_nt)
-                s_trit.append(randint(0, 2))
+                s_trit.append(trits[randint(0, 2)])
         	
         else:
-            s_trit.append(randint(0, 2))
+            s_trit.append(trits[randint(0, 2)])
             
     if len(s_trit) != longueur:
     	print("Pas la même longueur : s_dna {} s_trit {}".format(longueur, len(s_trit)))
@@ -1147,6 +1148,6 @@ def decode(s_dna, fichier, fichier_save):
     
     with open(fichier, "wb") as ouverture: #On crée un fichier avec le chemin crée auparavant et on y écrit la séquence binaire.
         ouverture.write(s_bytes)
-if __name__ == '__main__':
-	decoder("image.jpg.dna", "")
+# if __name__ == '__main__':
+# 	decoder("image.jpg.dna", "")
 

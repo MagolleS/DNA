@@ -283,6 +283,7 @@ def lancer():
             if var_correc.get() == 0:
                 decoder(valeur, var_save.get())
             else:
+                print("sans correection")
                 decoderSansCorrection(valeur, var_save.get())
     else:
         valeur=entre_texte_demo.get()

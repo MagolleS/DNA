@@ -110,11 +110,7 @@ def decodeSansCorrec(s_dna, fichier, fichier_save):
     
     s_dna_f = DNAToTrit(s_dna_f) #On transforme la liste d'ADN en une liste ternaire.
     
-    for trit in s_dna_f:
-        if not trit == "0":
-            if not trit == "1":
-                if not trit == "2":
-                    print("wtf", trit)
+
 
     s2 = s_dna_f[len(s_dna_f)-20:len(s_dna_f)] #On recupere les 20 dernier trits de la séquence , donc S2.
     i=0
