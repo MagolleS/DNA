@@ -1,0 +1,1 @@
+Ci-joint la version final du TPE dont ce programme résulte, ainsi que le fichier fourni par l'équipe ayant écrit cet article (https://www.nature.com/nature/journal/v494/n7435/full/nature11875.html), qui permet defaire correspondre à chaque octet une valeur en base 3
